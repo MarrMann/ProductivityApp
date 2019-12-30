@@ -16,4 +16,8 @@ TextStyle navbarStyle = new TextStyle(
   color: Colors.white,
   fontSize: 14.0
 );
-  
+TextStyle searchFieldHintStyle = new TextStyle(
+  fontFamily: 'Yu Gothic UI',
+  color: greyHighlight,
+  fontSize: 26.0
+);
