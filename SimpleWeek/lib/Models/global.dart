@@ -21,3 +21,8 @@ TextStyle searchFieldHintStyle = new TextStyle(
   color: greyHighlight,
   fontSize: 26.0
 );
+TextStyle taskStyle = new TextStyle(
+  fontFamily: 'Yu Gothic UI',
+  color: Colors.white,
+  fontSize: 20.0
+);
