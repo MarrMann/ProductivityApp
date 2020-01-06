@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-Color greenNormal = new Color(0xFF1AB151);
-Color greenDark = new Color(0xFF118F3F);
-Color darkGreyBackground = new Color (0xFF282A39);
-Color greyNormal = new Color (0xFF333541);
-Color greyHighlight = new Color (0xFF61636B);
+const Color greenNormal = Color(0xFF1AB151);
+const Color greenDark = Color(0xFF118F3F);
+const Color darkGreyBackground = Color (0xFF282A39);
+const Color greyNormal = Color (0xFF333541);
+const Color greyHighlight = Color (0xFF61636B);
 
 TextStyle headerStyle = new TextStyle(
   fontFamily: 'Yu Gothic UI',

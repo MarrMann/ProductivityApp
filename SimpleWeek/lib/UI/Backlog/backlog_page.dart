@@ -1,3 +1,4 @@
+import 'package:SimpleWeek/Models/Widgets/todo_task.dart';
 import 'package:flutter/material.dart';
 import 'package:SimpleWeek/Models/global.dart';
 
@@ -9,10 +10,75 @@ class BacklogPage extends StatefulWidget {
 }
 
 class _BacklogPageState extends State<BacklogPage> {
+  List<TodoTask> todoList = [
+    new TodoTask(
+      key: ValueKey(0),
+      taskText: 'Buy christmas presents',
+    ),
+    new TodoTask(
+      key: ValueKey('Res 0'),
+      taskText: "Research how to make an app",
+    ),
+    new TodoTask(
+      key: ValueKey('Mak 0'),
+      taskText:
+          'Make a really long task that won\'t fit the display box so it will have to overflow',
+    ),
+    new TodoTask(
+      key: ValueKey('Mak 1'),
+      taskText:
+          'Make a really long task that won\'t fit the display box so it will have to overflow',
+    ),
+    new TodoTask(
+      key: ValueKey('Mak 2'),
+      taskText:
+          'Make a really long task that won\'t fit the display box so it will have to overflow',
+    ),
+    new TodoTask(
+      key: ValueKey('Mak 3'),
+      taskText:
+          'Make a really long task that won\'t fit the display box so it will have to overflow',
+    ),
+  ];
+  List<int> items = [];
+
+  makeTasks() {
+    items = [];
+
+    for (int i = 0; i < todoList.length; i++) {
+      items.add(i);
+    }
+  }
+
+  TodoTask makeTask(int index) {
+    TodoTask task = todoList[index];
+    return TodoTask(
+      key: Key(task.taskText + index.toString()),
+      taskText: task.taskText,
+      color: task.color,
+    );
+  }
+
+  onReorder(int oldIndex, int newIndex) {
+    if (newIndex > oldIndex) {
+      newIndex--;
+    }
+
+    setState(() {
+      final int item = items.removeAt(oldIndex);
+      items.insert(newIndex, item);
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    makeTasks();
+  }
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
 
     return Container(
       color: darkGreyBackground,
@@ -21,11 +87,10 @@ class _BacklogPageState extends State<BacklogPage> {
           Container(
             height: 100.0,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(30.0),
-                bottomRight: Radius.circular(30.0)),
-              color: greyNormal
-            ),
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(30.0),
+                    bottomRight: Radius.circular(30.0)),
+                color: greyNormal),
             child: Center(
               child: Text(
                 'BACKLOG',
@@ -38,23 +103,25 @@ class _BacklogPageState extends State<BacklogPage> {
             children: <Widget>[
               Container(
                 height: height - 100.0 - 38 - 15 - 55,
-                child: ListView(
+                child: ReorderableListView(
                   padding: EdgeInsets.only(top: 68.0, left: 20.0, right: 20.0),
-                  children: getList(width),
-                  physics: new BouncingScrollPhysics(),
+                  children: items.map(makeTask).toList(),
+                  scrollDirection: Axis.vertical,
+                  onReorder: (int oldIndex, int newIndex) {
+                    onReorder(oldIndex, newIndex);
+                  },
                 ),
               ),
               Container(
                 height: 38.0,
                 margin: EdgeInsets.only(top: 15.0, left: 20.0, right: 20.0),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(19.0)),
-                  color: greyNormal
-                ),
+                    borderRadius: BorderRadius.all(Radius.circular(19.0)),
+                    color: greyNormal),
                 child: TextField(
                   decoration: InputDecoration(
                     border: InputBorder.none,
-                    hintText: 'Search....',
+                    hintText: 'Search...',
                     hintStyle: searchFieldHintStyle,
                     contentPadding: EdgeInsets.only(top: -1.0),
                     prefixIcon: new Padding(
@@ -75,256 +142,5 @@ class _BacklogPageState extends State<BacklogPage> {
         ],
       ),
     );
-  }
-
-  List<Widget> getList(double screenWidth) {
-    return [
-      Container(
-        height: 110.0,
-        child: Stack(
-          children: <Widget>[
-            Container(
-              height: 80,
-              width: screenWidth - 40.0,
-              margin: EdgeInsets.only(top: 5.0, right: 0.0),
-              decoration: BoxDecoration(
-                color: greenNormal,
-                borderRadius: BorderRadius.all(Radius.circular(40.0)),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 100.0, right: 30.0, bottom: 5.0),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Buy christmas presents',
-                    style: taskStyle,
-                    textAlign: TextAlign.left,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              height: 90.0,
-              width: 90.0,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-                border: Border.all(
-                  width: 5.0,
-                  color: darkGreyBackground
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-      Container(
-        height: 110.0,
-        child: Stack(
-          children: <Widget>[
-            Container(
-              height: 80,
-              width: screenWidth - 40.0,
-              margin: EdgeInsets.only(top: 5.0, right: 0.0),
-              decoration: BoxDecoration(
-                color: greenNormal,
-                borderRadius: BorderRadius.all(Radius.circular(40.0)),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 100.0, right: 30.0, bottom: 5.0),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Research how to make an app',
-                    style: taskStyle,
-                    textAlign: TextAlign.left,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              height: 90.0,
-              width: 90.0,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-                border: Border.all(
-                  width: 5.0,
-                  color: darkGreyBackground
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-      Container(
-        height: 110.0,
-        child: Stack(
-          children: <Widget>[
-            Container(
-              height: 80,
-              width: screenWidth - 40.0,
-              margin: EdgeInsets.only(top: 5.0, right: 0.0),
-              decoration: BoxDecoration(
-                color: greenNormal,
-                borderRadius: BorderRadius.all(Radius.circular(40.0)),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 100.0, right: 30.0, bottom: 5.0),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Make a really long task that won\'t fit the display box so it will have to overflow',
-                    style: taskStyle,
-                    textAlign: TextAlign.left,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              height: 90.0,
-              width: 90.0,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-                border: Border.all(
-                  width: 5.0,
-                  color: darkGreyBackground
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-      Container(
-        height: 110.0,
-        child: Stack(
-          children: <Widget>[
-            Container(
-              height: 80,
-              width: screenWidth - 40.0,
-              margin: EdgeInsets.only(top: 5.0, right: 0.0),
-              decoration: BoxDecoration(
-                color: greenNormal,
-                borderRadius: BorderRadius.all(Radius.circular(40.0)),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 100.0, right: 30.0, bottom: 5.0),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Make a really long task that won\'t fit the display box so it will have to overflow',
-                    style: taskStyle,
-                    textAlign: TextAlign.left,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              height: 90.0,
-              width: 90.0,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-                border: Border.all(
-                  width: 5.0,
-                  color: darkGreyBackground
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-      Container(
-        height: 110.0,
-        child: Stack(
-          children: <Widget>[
-            Container(
-              height: 80,
-              width: screenWidth - 40.0,
-              margin: EdgeInsets.only(top: 5.0, right: 0.0),
-              decoration: BoxDecoration(
-                color: greenNormal,
-                borderRadius: BorderRadius.all(Radius.circular(40.0)),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 100.0, right: 30.0, bottom: 5.0),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Make a really long task that won\'t fit the display box so it will have to overflow',
-                    style: taskStyle,
-                    textAlign: TextAlign.left,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              height: 90.0,
-              width: 90.0,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-                border: Border.all(
-                  width: 5.0,
-                  color: darkGreyBackground
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-      Container(
-        height: 110.0,
-        child: Stack(
-          children: <Widget>[
-            Container(
-              height: 80,
-              width: screenWidth - 40.0,
-              margin: EdgeInsets.only(top: 5.0, right: 0.0),
-              decoration: BoxDecoration(
-                color: greenNormal,
-                borderRadius: BorderRadius.all(Radius.circular(40.0)),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 100.0, right: 30.0, bottom: 5.0),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Make a really long task that won\'t fit the display box so it will have to overflow',
-                    style: taskStyle,
-                    textAlign: TextAlign.left,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              height: 90.0,
-              width: 90.0,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-                border: Border.all(
-                  width: 5.0,
-                  color: darkGreyBackground
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    ];
   }
 }
