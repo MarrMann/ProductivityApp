@@ -18,7 +18,7 @@ class TodoTask extends StatelessWidget
           Container(
             height: 80,
             width: screenWidth - 40.0,
-            margin: EdgeInsets.only(top: 5.0, right: 0.0),
+            margin: EdgeInsets.only(top: 15.0, right: 0.0),
             decoration: BoxDecoration(
               color: color,
               borderRadius: BorderRadius.all(Radius.circular(40.0)),
@@ -40,6 +40,7 @@ class TodoTask extends StatelessWidget
           Container(
             height: 90.0,
             width: 90.0,
+            margin: EdgeInsets.only(top: 10.0),
             decoration: BoxDecoration(
               color: Colors.white,
               shape: BoxShape.circle,

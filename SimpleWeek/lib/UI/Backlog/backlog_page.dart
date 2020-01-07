@@ -1,6 +1,7 @@
 import 'package:SimpleWeek/Models/Widgets/todo_task.dart';
 import 'package:flutter/material.dart';
 import 'package:SimpleWeek/Models/global.dart';
+import 'package:SimpleWeek/Models/Classes/task.dart';
 
 class BacklogPage extends StatefulWidget {
   BacklogPage({Key key}) : super(key: key);
@@ -10,35 +11,11 @@ class BacklogPage extends StatefulWidget {
 }
 
 class _BacklogPageState extends State<BacklogPage> {
-  List<TodoTask> todoList = [
-    new TodoTask(
-      key: ValueKey(0),
-      taskText: 'Buy christmas presents',
-    ),
-    new TodoTask(
-      key: ValueKey('Res 0'),
-      taskText: "Research how to make an app",
-    ),
-    new TodoTask(
-      key: ValueKey('Mak 0'),
-      taskText:
-          'Make a really long task that won\'t fit the display box so it will have to overflow',
-    ),
-    new TodoTask(
-      key: ValueKey('Mak 1'),
-      taskText:
-          'Make a really long task that won\'t fit the display box so it will have to overflow',
-    ),
-    new TodoTask(
-      key: ValueKey('Mak 2'),
-      taskText:
-          'Make a really long task that won\'t fit the display box so it will have to overflow',
-    ),
-    new TodoTask(
-      key: ValueKey('Mak 3'),
-      taskText:
-          'Make a really long task that won\'t fit the display box so it will have to overflow',
-    ),
+  List<Task> todoList = [
+    new Task("Buy christmas presents", false),
+    new Task("Research how to make an app", false),
+    new Task("Make a really long task that won\'t fit the display box so it will have to overflow", false),
+    new Task("Make a task with subtasks", false),
   ];
   List<int> items = [];
 
@@ -50,11 +27,11 @@ class _BacklogPageState extends State<BacklogPage> {
     }
   }
 
-  TodoTask makeTask(int index) {
-    TodoTask task = todoList[index];
+  Widget makeTask(int index) {
+    Task task = todoList[index];
     return TodoTask(
-      key: Key(task.taskText + index.toString()),
-      taskText: task.taskText,
+      key: Key(task.taskID),
+      taskText: task.description,
       color: task.color,
     );
   }
@@ -103,13 +80,18 @@ class _BacklogPageState extends State<BacklogPage> {
             children: <Widget>[
               Container(
                 height: height - 100.0 - 38 - 15 - 55,
-                child: ReorderableListView(
-                  padding: EdgeInsets.only(top: 68.0, left: 20.0, right: 20.0),
-                  children: items.map(makeTask).toList(),
-                  scrollDirection: Axis.vertical,
-                  onReorder: (int oldIndex, int newIndex) {
-                    onReorder(oldIndex, newIndex);
-                  },
+                child: Theme(
+                  data: ThemeData(
+                    canvasColor: Colors.transparent,
+                  ),
+                  child: ReorderableListView(
+                    padding: EdgeInsets.only(top: 68.0, left: 20.0, right: 20.0),
+                    children: items.map(makeTask).toList(),
+                    scrollDirection: Axis.vertical,
+                    onReorder: (int oldIndex, int newIndex) {
+                      onReorder(oldIndex, newIndex);
+                    },
+                  ),
                 ),
               ),
               Container(
