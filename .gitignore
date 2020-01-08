@@ -4,7 +4,7 @@
 .dart_tool/
 .packages
 build/
-env/
+
 # If you're building an application, you may want to check-in your pubspec.lock
 pubspec.lock
 
@@ -21,3 +21,6 @@ doc/api/
 *.js.deps
 *.js.map
 *.vscode
+
+env/
+__pycache__/
