@@ -11,29 +11,27 @@ class BacklogPage extends StatefulWidget {
 }
 
 class _BacklogPageState extends State<BacklogPage> {
-  List<Task> todoList = [
+  List<Task> fullTodoList = [
     new Task("Buy christmas presents", false),
     new Task("Research how to make an app", false),
     new Task("Make a really long task that won\'t fit the display box so it will have to overflow", false),
     new Task("Make a task with subtasks", false),
   ];
-  List<int> items = [];
+  List<Task> visibleTodoList = [];
+  String searchText;
 
-  makeTasks() {
-    items = [];
-
-    for (int i = 0; i < todoList.length; i++) {
-      items.add(i);
-    }
-  }
-
-  Widget makeTask(int index) {
-    Task task = todoList[index];
+  Widget makeTask(Task task) {
     return TodoTask(
       key: Key(task.taskID),
       taskText: task.description,
       color: task.color,
     );
+  }
+
+  makeTaskList(){
+    for (var task in fullTodoList) {
+      visibleTodoList.add(new Task(task.description, task.completed));
+    }
   }
 
   onReorder(int oldIndex, int newIndex) {
@@ -42,15 +40,18 @@ class _BacklogPageState extends State<BacklogPage> {
     }
 
     setState(() {
-      final int item = items.removeAt(oldIndex);
-      items.insert(newIndex, item);
+      final Task task = visibleTodoList.removeAt(oldIndex);
+      visibleTodoList.insert(newIndex, task);
     });
+  }
+
+  onSearch(String searchText){
   }
 
   @override
   void initState() {
     super.initState();
-    makeTasks();
+    makeTaskList();
   }
 
   @override
@@ -61,67 +62,83 @@ class _BacklogPageState extends State<BacklogPage> {
       color: darkGreyBackground,
       child: Column(
         children: <Widget>[
-          Container(
-            height: 100.0,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(30.0),
-                    bottomRight: Radius.circular(30.0)),
-                color: greyNormal),
-            child: Center(
-              child: Text(
-                'BACKLOG',
-                textAlign: TextAlign.center,
-                style: headerStyle,
-              ),
-            ),
-          ),
+          buildTitle(context),
           Stack(
             children: <Widget>[
-              Container(
-                height: height - 100.0 - 38 - 15 - 55,
-                child: Theme(
-                  data: ThemeData(
-                    canvasColor: Colors.transparent,
-                  ),
-                  child: ReorderableListView(
-                    padding: EdgeInsets.only(top: 68.0, left: 20.0, right: 20.0),
-                    children: items.map(makeTask).toList(),
-                    scrollDirection: Axis.vertical,
-                    onReorder: (int oldIndex, int newIndex) {
-                      onReorder(oldIndex, newIndex);
-                    },
-                  ),
-                ),
-              ),
-              Container(
-                height: 38.0,
-                margin: EdgeInsets.only(top: 15.0, left: 20.0, right: 20.0),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(19.0)),
-                    color: greyNormal),
-                child: TextField(
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'Search...',
-                    hintStyle: searchFieldHintStyle,
-                    contentPadding: EdgeInsets.only(top: -1.0),
-                    prefixIcon: new Padding(
-                      padding: EdgeInsets.only(left: 3.0),
-                      child: new Icon(
-                        Icons.search,
-                        color: greyHighlight,
-                        size: 32.0,
-                      ),
-                    ),
-                  ),
-                  //TODO: Add search functionality
-                  onChanged: (String input) {},
-                ),
-              ),
+              buildTaskList(context, height),
+              buildSearchBar(context),
             ],
           )
         ],
+      ),
+    );
+  }
+
+  Widget buildTitle(BuildContext context)
+  {
+    return Container(
+      height: 100.0,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(30.0),
+              bottomRight: Radius.circular(30.0)),
+          color: greyNormal),
+      child: Center(
+        child: Text(
+          'BACKLOG',
+          textAlign: TextAlign.center,
+          style: headerStyle,
+        ),
+      ),
+    );
+  }
+
+  Widget buildTaskList(BuildContext context, double screenHeight){
+    return Container(
+      height: screenHeight - 100.0 - 38 - 15 - 55,
+      child: Theme(
+        data: ThemeData(
+          canvasColor: Colors.transparent,
+        ),
+        child: ReorderableListView(
+          padding: EdgeInsets.only(top: 68.0, left: 20.0, right: 20.0),
+          children: visibleTodoList.map(makeTask).toList(),
+          scrollDirection: Axis.vertical,
+          onReorder: (int oldIndex, int newIndex) {
+            onReorder(oldIndex, newIndex);
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget buildSearchBar(BuildContext context){
+    return Container(
+      height: 38.0,
+      margin: EdgeInsets.only(top: 15.0, left: 20.0, right: 20.0),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(19.0)),
+          color: greyNormal),
+      child: TextField(
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          hintText: 'Search...',
+          hintStyle: searchFieldHintStyle,
+          contentPadding: EdgeInsets.only(top: -1.0),
+          prefixIcon: new Padding(
+            padding: EdgeInsets.only(left: 3.0),
+            child: new Icon(
+              Icons.search,
+              color: greyHighlight,
+              size: 32.0,
+            ),
+          ),
+        ),
+        //TODO: Add search functionality
+        onChanged: (String input) {
+          searchText = input;
+          onSearch(input);
+        },
       ),
     );
   }
