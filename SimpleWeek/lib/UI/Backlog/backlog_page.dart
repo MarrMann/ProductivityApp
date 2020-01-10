@@ -43,8 +43,33 @@ class _BacklogPageState extends State<BacklogPage> {
     }
 
     setState(() {
-      final Task task = visibleTodoList.removeAt(oldIndex);
-      visibleTodoList.insert(newIndex, task);
+      //Re-order the visible list
+      Task oldTask = visibleTodoList[newIndex];
+      Task insertedTask = visibleTodoList.removeAt(oldIndex);
+      visibleTodoList.insert(newIndex, insertedTask);
+
+      //Re-order the full list
+      //Find the index of the removed task and remove it
+      for (var i = fullTodoList.length - 1; i >= 0; i--) {
+        if (fullTodoList[i].taskID == insertedTask.taskID)
+        {
+          fullTodoList.removeAt(i);
+          oldIndex = i;
+        }
+      }
+      //Fidn the index where we want to insert the task
+      for (var i = 0; i < fullTodoList.length; i++) {
+        if (fullTodoList[i].taskID == oldTask.taskID)
+        {
+          newIndex = i;
+          break;
+        }
+      }
+      if (newIndex >= oldIndex){
+        newIndex++;
+      }
+      print('old: $oldIndex, new: $newIndex');
+      fullTodoList.insert(newIndex, insertedTask);
     });
   }
 
@@ -129,6 +154,7 @@ class _BacklogPageState extends State<BacklogPage> {
       ),
       child: TextField(
         style: searchFieldEditStyle,
+        cursorColor: Colors.white,
         decoration: InputDecoration(
           border: InputBorder.none,
           hintText: 'Search...',
