@@ -18,7 +18,7 @@ class _BacklogPageState extends State<BacklogPage> {
     new Task("Make a task with subtasks", false),
   ];
   List<Task> visibleTodoList = [];
-  String searchText;
+  String searchText = '';
 
   Widget makeTask(Task task) {
     return TodoTask(
@@ -29,8 +29,11 @@ class _BacklogPageState extends State<BacklogPage> {
   }
 
   makeTaskList(){
+    visibleTodoList = [];
     for (var task in fullTodoList) {
-      visibleTodoList.add(new Task(task.description, task.completed));
+      if (searchText.isEmpty || task.description.toLowerCase().contains(searchText)){
+        visibleTodoList.add(new Task(task.description, task.completed));
+      }
     }
   }
 
@@ -45,7 +48,11 @@ class _BacklogPageState extends State<BacklogPage> {
     });
   }
 
-  onSearch(String searchText){
+  onSearch(){
+    setState(() {
+      searchText = searchText.toLowerCase();
+      makeTaskList();
+    });
   }
 
   @override
@@ -60,7 +67,7 @@ class _BacklogPageState extends State<BacklogPage> {
 
     return Container(
       color: darkGreyBackground,
-      child: Column(
+      child: Wrap(
         children: <Widget>[
           buildTitle(context),
           Stack(
@@ -79,10 +86,10 @@ class _BacklogPageState extends State<BacklogPage> {
     return Container(
       height: 100.0,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(30.0),
-              bottomRight: Radius.circular(30.0)),
-          color: greyNormal),
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(30.0),
+          bottomRight: Radius.circular(30.0)),
+        color: greyNormal),
       child: Center(
         child: Text(
           'BACKLOG',
@@ -117,9 +124,11 @@ class _BacklogPageState extends State<BacklogPage> {
       height: 38.0,
       margin: EdgeInsets.only(top: 15.0, left: 20.0, right: 20.0),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(19.0)),
-          color: greyNormal),
+        borderRadius: BorderRadius.all(Radius.circular(19.0)),
+        color: greyNormal
+      ),
       child: TextField(
+        style: searchFieldEditStyle,
         decoration: InputDecoration(
           border: InputBorder.none,
           hintText: 'Search...',
@@ -137,7 +146,7 @@ class _BacklogPageState extends State<BacklogPage> {
         //TODO: Add search functionality
         onChanged: (String input) {
           searchText = input;
-          onSearch(input);
+          onSearch();
         },
       ),
     );

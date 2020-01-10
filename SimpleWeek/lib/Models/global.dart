@@ -19,6 +19,12 @@ TextStyle navbarStyle = new TextStyle(
 TextStyle searchFieldHintStyle = new TextStyle(
   fontFamily: 'Yu Gothic UI',
   color: greyHighlight,
+  fontSize: 26.0,
+  fontStyle: FontStyle.italic
+);
+TextStyle searchFieldEditStyle = new TextStyle(
+  fontFamily: 'Yu Gothic UI',
+  color: Colors.white,
   fontSize: 26.0
 );
 TextStyle taskStyle = new TextStyle(
