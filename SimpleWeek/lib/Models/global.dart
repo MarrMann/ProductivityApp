@@ -47,3 +47,8 @@ TextStyle daysMonthStyle = new TextStyle(
   color: Colors.white,
   fontSize: 28.0,
 );
+TextStyle settingsStyle = new TextStyle(
+  fontFamily: 'Yu Gothic UI',
+  color: Colors.white,
+  fontSize: 16.0,
+);

@@ -2,6 +2,7 @@ import 'package:SimpleWeek/Models/global.dart';
 import 'package:SimpleWeek/UI/Backlog/backlog_page.dart';
 import 'package:SimpleWeek/UI/Calendar/calendar_page.dart';
 import 'package:SimpleWeek/UI/Calendar/daily_page.dart';
+import 'package:SimpleWeek/UI/Settings/Settings.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
@@ -39,9 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
               new Container(
                 color: darkGreyBackground,
               ),
-              new Container(
-                color: darkGreyBackground,
-              ),
+              SettingsPage(),
               BacklogPage(),
               CalendarPage(),
             ],
