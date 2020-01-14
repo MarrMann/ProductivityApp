@@ -32,3 +32,18 @@ TextStyle taskStyle = new TextStyle(
   color: Colors.white,
   fontSize: 20.0
 );
+TextStyle daysSubtitleStyle = new TextStyle(
+  fontFamily: 'Yu Gothic UI',
+  color: Colors.white,
+  fontSize: 48.0,
+);
+TextStyle daysDescriptionStyle = new TextStyle(
+  fontFamily: 'Yu Gothic UI',
+  color: Colors.white.withAlpha(100),
+  fontSize: 20.0,
+);
+TextStyle daysMonthStyle = new TextStyle(
+  fontFamily: 'Yu Gothic UI',
+  color: Colors.white,
+  fontSize: 28.0,
+);
