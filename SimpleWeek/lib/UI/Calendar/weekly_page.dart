@@ -18,7 +18,15 @@ class _WeeklyPageState extends State<WeeklyPage> {
     new Task("Make a task with subtasks", false),
   ];
   List<Task> visibleTodoList = [];
-  String searchText = '';
+  final List<String> daysInAWeek = [
+    "M",
+    "T",
+    "W",
+    "T",
+    "F",
+    "S",
+    "S",
+  ];
 
   Widget makeTask(Task task) {
     return TodoTask(
@@ -79,8 +87,11 @@ class _WeeklyPageState extends State<WeeklyPage> {
   }
 
   Widget buildSubtitle(BuildContext context){
+    FixedExtentScrollController scrollController = new FixedExtentScrollController();
+
     return Container(
       height: 120.0,
+      width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
         color: greenDark,
         borderRadius: BorderRadius.only(
@@ -88,12 +99,42 @@ class _WeeklyPageState extends State<WeeklyPage> {
           bottomRight: Radius.circular(30.0)
         ),
       ),
-      child: Center(
-        child: Text(
-          'WEEK 1',
-          textAlign: TextAlign.center,
-          style: headerStyle,
-        ),
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(top: 12.0),
+            child: RotatedBox(
+              quarterTurns: 3,
+              child: Container(
+                height: MediaQuery.of(context).size.width,
+                width: 50.0,
+                child: ListWheelScrollView(
+                  controller: scrollController,
+                  physics: FixedExtentScrollPhysics(),
+                  itemExtent: 80.0,
+                  diameterRatio: 1.5,
+                  children: daysInAWeek.map((day) {
+                    return RotatedBox(
+                      quarterTurns: 1,
+                      child: Text(
+                        day,
+                        textAlign: TextAlign.center,
+                        style: daysSubtitleStyle,
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Text(
+              'January',
+              style: daysMonthStyle,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -101,19 +142,6 @@ class _WeeklyPageState extends State<WeeklyPage> {
   Widget buildTaskList(BuildContext context, double screenHeight){
     return Container(
       height: screenHeight - 100.0 - 38 - 15 - 55,
-      child: Theme(
-        data: ThemeData(
-          canvasColor: Colors.transparent,
-        ),
-        child: ReorderableListView(
-          padding: EdgeInsets.only(top: 68.0, left: 20.0, right: 20.0),
-          children: visibleTodoList.map(makeTask).toList(),
-          scrollDirection: Axis.vertical,
-          onReorder: (int oldIndex, int newIndex) {
-            //onReorder(oldIndex, newIndex);
-          },
-        ),
-      ),
     );
   }
 }
